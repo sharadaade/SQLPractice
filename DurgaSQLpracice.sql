@@ -171,6 +171,38 @@ select * from table2
 -- Identity
 -- identity(seed value, increment value)
 
+create table emp1
+(
+id int identity(1, 1),
+name varchar(20),
+address varchar(50)
+)
+
+-- add column
+alter table emp1
+add age int
+
+-- delete column
+alter table emp1
+drop column address
+
+set identity_insert emp1 on
+insert into emp1 (id,name,age)values (6,'fall',24)
+insert into emp1 values ('jocker',19), ('jaz', 55), ('smolder',22), ('heimendinger',300)
+
+-- to get deetails of table
+sp_help emp1
+
+-- explicitly we cannot insert the value of identity 
+-- if you want to set identity follow below command or need to set indentity set on
+set identity_insert emp1 on
+
+-- when we delete record and then we want to start identity from again 1 then follow below step
+-- dbcc means database consistency check
+-- dbcc checkident(table_name, reseed, 0)
+dbcc checkident(emp1, reseed, 0)
+
+select * from emp1
 
 
 sp_rename 'userlogin.usename' , 'username'
