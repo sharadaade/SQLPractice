@@ -5,7 +5,7 @@ create table usertable
 	username varchar(50) unique,
 	email varchar(100),
 	password varchar(255),
-	created_at datetime
+	created_at timestamp
 )
 
 select * from usertable
@@ -17,9 +17,4 @@ values
 ('sharadaade', 'aadesharad@gmail.com','Sharad@123', getdate())
 
 
-select * from usertable where username = 'sharadaade' and password = 'Sharad@123'
-
-
-
-
-
+select * from login where username = 'sharadaade' and password = 'Sharad@123'

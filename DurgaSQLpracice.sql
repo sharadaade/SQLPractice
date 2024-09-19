@@ -502,14 +502,111 @@ select EOMONTH(getdate())
 select EOMONTH('2014-05-22')
 
 
+-- datefromparts:
+-- Syntax: 
+-- datefromparts(year,month,day)
+select DATEFROMPARTS(2023,2,23)
+
+select DATEFROMPARTS(2020,2,29)
 
 
 
+-- coalesce(): 
+-- it is used to return the first non null values from the table
+create table coltable
+(
+ id int,
+ fname varchar(50),
+ mname varchar(50),
+ lname varchar(50)
+ )
+
+ select * from coltable
+
+ insert into coltable values (1, 'sharad','sahebrao','aade')
+ insert into coltable values (2, 'jj',null,null)
+ insert into coltable values (3, null,'ok','sharma')
+ insert into coltable values (4, 'jojo',null, 'dede')
+ 
+ select * from coltable
+ select id, coalesce(fname, mname, lname) from coltable
+
+ -- cast and convert functionl:
+ -- CAST(expression as datatype[(length)])
+
+ -- CONVERT(datatype[length]), expression, [style])
+
+ create table tblcastconvert
+ (
+  id int,
+  name varchar(20),
+  DOB date
+ )
+
+ select * from tblcastconvert
+
+ insert into tblcastconvert values (1, 'jojo', '1999-02-11'),
+								   (2, 'apa', '1991-05-23'),
+								   (3, 'nana', '1989-08-04')
 
 
+--CAST ( expression AS data_type [ ( length ) ] )
+Select id, name, DOB, CAST(DOB as nvarchar(10)) as ConvertedDOB from tblcastconvert
 
+---CONVERT ( data_type [ ( length ) ] , expression [ , style ] )
+Select id, name, DOB, Convert(nvarchar(15), DOB,106) as ConvertedDOB from tblcastconvert
 
+-- style dateformat
+-- 101 mm/dd/yyyy
+-- 102 yy.mm.dd
+-- 103 dd/mm/yyyy
+-- 104 dd.mm.yy
+-- 105 dd-mm-yy
+-- 106 dd mmm yyyy(23 aug 2019)
 
+-- Rank and Dense_Rank functions
+-------------------------------
+--•Introduced in SQL Server 2005
+--•Returns a rank starting at 1 based on the ordering of rows imposed by the ORDER BY clause
+--•ORDER BY clause is required
+--•PARTITION BY clause is optional
+--•When the data is partitioned, rank is reset to 1 when the partition changes
+
+-- Difference between Rank and Dense_Rank functions
+-- Rank function skips ranking(s) if there is a tie where as Dense_Rank will not.
+Create Table Emplo
+(
+Id int primary key,
+Name nvarchar(50),
+Gender nvarchar(10),
+Salary int
+)
+
+Insert Into Emplo Values (1, 'Mark', 'Male', 8000)
+Insert Into Emplo Values (2, 'John', 'Male', 8000)
+Insert Into Emplo Values (3, 'Pam', 'Female', 5000)
+Insert Into Emplo Values (4, 'Sara', 'Female', 4000)
+Insert Into Emplo Values (5, 'Todd', 'Male', 3500)
+Insert Into Emplo Values (6, 'Mary', 'Female', 6000)
+Insert Into Emplo Values (7, 'Ben', 'Male', 6500)
+Insert Into Emplo Values (8, 'Jodi', 'Female', 4500)
+Insert Into Emplo Values (9, 'Tom', 'Male', 7000)
+Insert Into Emplo Values (10, 'Ron', 'Male', 6800)
+
+select*from Emplo
+
+---without partition
+SELECT Name, Gender, Salary,
+RANK() OVER (ORDER BY Salary DESC) AS [Rank],
+DENSE_RANK() OVER (ORDER BY Salary DESC) AS DenseRank
+FROM Emplo
+
+---with partition
+SELECT Name, Gender, Salary,
+RANK() OVER (PARTITION BY Gender ORDER BY Salary DESC) AS [Rank],
+DENSE_RANK() OVER (PARTITION BY Gender ORDER BY Salary DESC)
+AS DenseRank
+FROM Emplo
 
 
 
@@ -519,6 +616,17 @@ sp_helpconstraint child
 
 insert into emp7 values(1,'sai',89) --not insert
 insert into emp7 values(1,'sai',19) --not insert
+
+
+
+
+
+
+
+
+
+
+
 
 sp_rename 'userlogin.usename' , 'username'
 select * from sysobjects where xtype='U'
